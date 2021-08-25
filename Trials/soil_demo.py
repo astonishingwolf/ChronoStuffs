@@ -31,7 +31,7 @@ class MySoilParams (veh.SoilParametersCallback):
             self.m_elastic_K = 4e8
             self.m_damping_R = 3e4
         
-
+tire_rad = 0.8
 
 mysystem = chrono.ChSystemSMC()
 
@@ -40,37 +40,16 @@ ground = chrono.ChBody()
 ground.SetBodyFixed(True)
 mysystem.Add(ground)
 
-
-# Load mesh
-mesh = chrono.ChTriangleMeshConnected()
-mesh.LoadWavefrontMesh(chrono.GetChronoDataFile('models/tractor_wheel/tractor_wheel.obj'))
-
 # Set visualization assets
 vis_shape = chrono.ChTriangleMeshShape()
 vis_shape.SetMesh(mesh)
-body.AddAsset(vis_shape)
-body.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
+
 
 # Set collision shape
 material = chrono.ChMaterialSurfaceSMC()
 
-body.GetCollisionModel().ClearModel()
-body.GetCollisionModel().AddTriangleMesh(material,                # contact material
-                                         mesh,                    # the mesh 
-                                         False,                   # is it static?
-                                         False,                   # is it convex?
-                                         chrono.ChVectorD(0,0,0), # position on body
-                                         chrono.ChMatrix33D(1),   # orientation on body 
-                                         0.01)                    # "thickness" for increased robustness
-body.GetCollisionModel().BuildModel()
-body.SetCollide(True)
 
-# Create motor
-motor = chrono.ChLinkMotorRotationAngle()
-motor.SetSpindleConstraint(chrono.ChLinkMotorRotation.SpindleConstraint_OLDHAM)
-motor.SetAngleFunction(chrono.ChFunction_Ramp(0, math.pi / 4))
-motor.Initialize(body, ground, chrono.ChFrameD(tire_center, chrono.Q_from_AngY(math.pi/2)))
-mysystem.Add(motor)
+
 
 # ------------------------
 # Create SCM terrain patch
@@ -129,7 +108,6 @@ myapplication.SetTimestep(0.002)
 
 while(myapplication.GetDevice().run()):
     myapplication.BeginScene()
-    myapplication.GetSceneManager().getActiveCamera().setTarget(chronoirr.vector3dfCH(body.GetPos()))
     myapplication.DrawAll()
     myapplication.DoStep()
     myapplication.EndScene()
