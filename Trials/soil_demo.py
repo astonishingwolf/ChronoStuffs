@@ -40,9 +40,7 @@ ground = chrono.ChBody()
 ground.SetBodyFixed(True)
 mysystem.Add(ground)
 
-# Set visualization assets
-vis_shape = chrono.ChTriangleMeshShape()
-vis_shape.SetMesh(mesh)
+
 
 
 # Set collision shape
