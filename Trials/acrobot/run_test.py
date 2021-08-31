@@ -36,7 +36,10 @@ m_length = 1.0
 m_visualization = "irrlicht"
 m_datapath = "\Chrono_Biped\Biped_V1"
 
-    
+tire_rad = 0.8
+tire_vel_z0 = -3
+tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
+   
 chrono.SetChronoDataPath(m_datapath)
 
 
@@ -61,18 +64,28 @@ print ("...loading done!");
 for my_item in exported_items:
 	print (my_item.GetName())
     
-for my_item in exported_items:
-	print (my_item.GetFrame_REF_to_abs())
+body1 = chrono.ChBody()
+body2 = chrono.ChBody()
 
 # Add items to the physical system
 my_system = chrono.ChSystemNSC()
 for my_item in exported_items:
 	my_system.Add(my_item)
+body1 = exported_items[1] 
+body2 = exported_items[0]
 
 		
 bbody    = my_system.SearchBody('link-1')
 bbody.SetBodyFixed(False)	
 # Optionally set some solver parameters.
+
+# Create motor
+motor = chrono.ChLinkMotorRotationAngle()
+motor.SetSpindleConstraint(chrono.ChLinkMotorRotation.SpindleConstraint_OLDHAM)
+motor.SetAngleFunction(chrono.ChFunction_Ramp(0, math.pi / 4))
+cA = chrono.ChVectorD(-0.015,0.12,-0.12)
+motor.Initialize(body1, body2, False , chrono.ChFrameD(tire_center , chrono.Q_from_AngY(math.pi/2)))
+my_system.Add(motor)
 
 #my_system.SetMaxPenetrationRecoverySpeed(1.00)
 my_solver = chrono.ChSolverBB()
