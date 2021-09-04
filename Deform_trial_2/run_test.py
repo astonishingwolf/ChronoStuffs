@@ -22,7 +22,7 @@ import pychrono.vehicle as veh
 #
 # Parse command-line parameters
 
-m_filename = "leg.py"
+m_filename = "block_1.py"
 m_timestep = 0.01
 m_length = 1.0
 m_visualization = "irrlicht"
@@ -84,31 +84,6 @@ ground = chrono.ChBody()
 ground.SetBodyFixed(True)
 my_system.Add(ground)        
 # Optionally set some solver parameters.
-#Motors Variables
-st = chrono.ChVectorD(0.0122275345305963,0.00120884241999014,0.0332147998549766)
-sc = chrono.ChVectorD(0.245,0.0,0.0)
-#Between Torso_backet-2 and torso
-my_motor = chrono.ChLinkMotorRotationSpeed()
-my_motor.Initialize(it[1],   # the first connected body
-                    it[2],   # the second connected body
-                    chrono.ChFrameD(chrono.ChVectorD(0.0354978494402492,0.0296733424655571,0.00525565296559194))) # where to create the motor in abs.space
-#my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
-my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI*0) # ang.speed: 180°/s
-my_motor.SetMotorFunction(my_angularspeed)
-my_system.Add(my_motor)
-
-#Between Torso_backet-2 and torso
-my_motor1 = chrono.ChLinkMotorRotationSpeed()
-my_motor1.Initialize(it[2],   # the first connected body
-                    it[3],   # the second connected body
-                    chrono.ChFrameD(chrono.ChVectorD(0.141018628033538,-0.090598704515718,0.0952556529655919))) # where to create the motor in abs.space
-my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
-my_motor1.SetMotorFunction(my_angularspeed)
-my_system.Add(my_motor1)
-
-
-
-
 
 terrain = veh.SCMDeformableTerrain(my_system)
 terrain.SetPlane(chrono.ChCoordsysD(chrono.ChVectorD(0,0.2,0), chrono.Q_from_AngX(-math.pi/2)))
