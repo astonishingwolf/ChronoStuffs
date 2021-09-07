@@ -11,7 +11,7 @@ import pychrono.irrlicht as chronoirr
 import pychrono.vehicle as veh
 import math
 
-chrono.SetChronoDataPath(r"C:\Users\dasgu\Documents\ChronoStuffs\Deform_trial_2\block_1_shapes")
+chrono.SetChronoDataPath(r"C:\Users\dasgu\Documents\ChronoStuffs\Deform_trial_2\block_2_shapes")
 
 var_params = True
 
@@ -41,34 +41,67 @@ class MySoilParams (veh.SoilParametersCallback):
 print ("Example: create a rigid body based on a .obj mesh file");
 
 
-mysystem      = chrono.ChSystemNSC()
+mysystem      = chrono.ChSystemSMC()
 
+# Create the ground
+ground = chrono.ChBody()
+ground.SetBodyFixed(True)
+mysystem.Add(ground)
 
 chrono.ChCollisionModel.SetDefaultSuggestedEnvelope(0.001);
 chrono.ChCollisionModel.SetDefaultSuggestedMargin(0.001);
 
-contact_material = chrono.ChMaterialSurfaceNSC()
+contact_material = chrono.ChMaterialSurfaceSMC()
 
 
+#ody = chrono.ChBody()
+#mysystem.Add(body)
+#body.SetMass(500)
+#body.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
+#body.SetPos(chrono.ChVectorD(0.5,0.5,0))
+#
+# Load mesh
+#mesh = chrono.ChTriangleMeshConnected()
+#m#esh.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_1_1.obj'))
 
+# Set visualization assets
+#vis_shape = chrono.ChTriangleMeshShape()
+#body.AddAsset(vis_shape)
+#body.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
 
-body_A= chrono.ChBodyEasyMesh(chrono.GetChronoDataFile('/body_1_1.obj'), # mesh filename
-                              700,             # density kg/m^3
-                              True,             # automatically compute mass and inertia
-                              True,             # visualize?>
-                              True,             # collide?
-                              contact_material, # contact material
-                              )
-body_A.SetPos(chrono.ChVectorD(0.5,0.5,0))
-mysystem.Add(body_A)
+# Set collision shape
+#material = chrono.ChMaterialSurfaceSMC()
+
+#body.GetCollisionModel().AddTriangleMesh(material,                # contact material
+ #                                        mesh,                    # the mesh 
+  #                                       False,                   # is it static?
+  #                                       False,                   # is it convex?
+ #                                        chrono.ChVectorD(0,0,0), # position on body
+ #                                        chrono.ChMatrix33D(1),   # orientation on body 
+ #                                        0.01)                    # "thickness" for increased robustness
+#body.GetCollisionModel().BuildModel()
+#body.SetCollide(True)
+
+#body_A= chrono.ChBodyEasyMesh(chrono.GetChronoDataFile('/body_1_1.obj'), # mesh filename
+#                              700,             # density kg/m^3
+   #                           True,             # automatically compute mass and inertia
+   #                           True,             # visualize?>
+   #                           True,             # collide?
+    #                          contact_material, # contact material
+       #                       )
+#body_A.SetPos(chrono.ChVectorD(0.5,0.5,0))
+#mysystem.Add(body_A)
 
 
 # Rigid body part
 body_B= chrono.ChBodyAuxRef()
 body_B.SetPos(chrono.ChVectorD(0,0.5,0))
-body_B.SetMass(16)
-body_B.SetInertiaXX(chrono.ChVectorD(0.270,0.400,0.427))
-body_B.SetInertiaXY(chrono.ChVectorD(0.057,0.037,-0.062))
+body_B.SetMass(50)
+body_B.SetInertiaXX(chrono.ChVectorD(2, 2, 2))
+#body_B.SetInertiaYY(chrono.ChVectorD(0.0020, 0.0020, 0.0020))
+#body_B.SetInertiaZZ(chrono.ChVectorD(0.0020, 0.0020, 0.0020))
+#body_B.SetInertiaXX(chrono.ChVectorD(0.270,0.400,0.427))
+#body_B.SetInertiaXY(chrono.ChVectorD(0.057,0.037,-0.062))
 body_B.SetFrame_COG_to_REF(chrono.ChFrameD(
             chrono.ChVectorD( 0.12,0.0,0),
             chrono.ChQuaternionD(1,0,0,0)))
