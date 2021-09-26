@@ -21,7 +21,7 @@ import pychrono.vehicle as veh
 # ---------------------------------------------------------------------
 #
 # Parse command-line parameters
-
+chrono.SetChronoDataPath(r"C:\Users\dasgu\Documents\ChronoStuffs\Deform_trial_2\block_2_shapes")
 m_filename = "block_1.py"
 m_timestep = 0.01
 m_length = 1.0
@@ -56,22 +56,67 @@ class MySoilParams (veh.SoilParametersCallback):
             self.m_elastic_K = 4e8
             self.m_damping_R = 3e4
         
+
+# Global parameters for tire
 tire_rad = 0.8
+tire_vel_z0 = -3
+tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
+tire_w0 = tire_vel_z0 / tire_rad
 
+# ----------------------------
+# Create the mechanical system
+# ----------------------------
 
+mysystem = chrono.ChSystemSMC()
 
-# Remove the trailing .py and add / in case of file without ./
+# Create the ground
+ground = chrono.ChBody()
+ground.SetBodyFixed(True)
+mysystem.Add(ground)# Remove the trailing .py and add / in case of file without ./
 m_absfilename = os.path.abspath(m_filename)
 m_modulename = os.path.splitext(m_absfilename)[0]
 
 exported_items = chrono.ImportSolidWorksSystem(m_modulename)
 
 # Add items to the physical system
-my_system = chrono.ChSystemNSC()
+mysystem = chrono.ChSystemNSC()
 it = []
+j=0
 for my_item in exported_items:
-    my_system.Add(my_item)
-    it.append(my_item)
+    if(j==1):
+        mysystem.Add(my_item)
+        #my_item.SetMass(10)
+        # Load mesh
+        mesh = chrono.ChTriangleMeshConnected()
+        mesh.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_1_1.obj'))
+
+        # Set visualization assets
+        vis_shape = chrono.ChTriangleMeshShape()
+        vis_shape.SetMesh(mesh)
+        my_item.AddAsset(vis_shape)
+        my_item.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
+
+        # Set collision shape
+        material = chrono.ChMaterialSurfaceSMC()
+
+        my_item.GetCollisionModel().ClearModel()
+        my_item.GetCollisionModel().AddTriangleMesh(material,                # contact material
+                                                    mesh,                    # the mesh 
+                                                    False,                   # is it static?
+                                                    False,                   # is it convex?
+                                                    chrono.ChVectorD(0,0,0), # position on body
+                                                    chrono.ChMatrix33D(1),   # orientation on body 
+                                                    0.01)                    # "thickness" for increased robustness
+        my_item.GetCollisionModel().BuildModel()
+        my_item.SetCollide(True)
+        j = j+1
+    elif(j>1):
+        mysystem.Add(my_item)
+        it.append(my_item)
+        j = j+1
+    else :
+        j= j+1
+    
 
 #printing Component names
 
@@ -80,12 +125,8 @@ for my_item in exported_items:
 	print (my_item.GetName())
 
 
-ground = chrono.ChBody()
-ground.SetBodyFixed(True)
-my_system.Add(ground)        
-# Optionally set some solver parameters.
 
-terrain = veh.SCMDeformableTerrain(my_system)
+terrain = veh.SCMDeformableTerrain(mysystem)
 terrain.SetPlane(chrono.ChCoordsysD(chrono.ChVectorD(0,0.2,0), chrono.Q_from_AngX(-math.pi/2)))
 terrain.Initialize(2.0, 6.0, 0.04)
 
@@ -111,10 +152,10 @@ terrain.SetPlotType(veh.SCMDeformableTerrain.PLOT_PRESSURE, 0, 30000.2)
 
 #my_system.SetMaxPenetrationRecoverySpeed(1.00)
 my_solver = chrono.ChSolverBB()
-my_system.SetSolver(my_solver)
+mysystem.SetSolver(my_solver)
 my_solver.SetMaxIterations(600)
 my_solver.EnableWarmStart(True);
-my_system.Set_G_acc(chrono.ChVectorD(0,-9.8,0))
+mysystem.Set_G_acc(chrono.ChVectorD(0,-9.8,0))
     
 if m_visualization == "irrlicht":
 
@@ -123,7 +164,7 @@ if m_visualization == "irrlicht":
     #  Create an Irrlicht application to visualize the system
     #
 
-    myapplication = chronoirr.ChIrrApp(my_system, 'Test', chronoirr.dimension2du(1280,720))
+    myapplication = chronoirr.ChIrrApp(mysystem, 'Test', chronoirr.dimension2du(1280,720))
 
     myapplication.AddTypicalSky(chrono.GetChronoDataPath() + 'skybox/')
     myapplication.AddTypicalLogo(chrono.GetChronoDataPath() + 'logo_pychrono_alpha.png')

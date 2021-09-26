@@ -28,15 +28,14 @@ body_1.SetInertiaXX(chrono.ChVectorD(6.2778407134888e-06,1.22778407134888e-05,1.
 body_1.SetInertiaXY(chrono.ChVectorD(7.94093388050907e-23,8.73502726855997e-22,-3.97046694025453e-22))
 body_1.SetFrame_COG_to_REF(chrono.ChFrameD(chrono.ChVectorD(0.025,-1.3335384458986e-18,-1.33353844589861e-20),chrono.ChQuaternionD(1,0,0,0)))
 body_1.SetBodyFixed(True)
-body_1.GetCollisionModel().ClearModel()
-body_1.GetCollisionModel().AddTriangleMesh(material,                # contact material
-                                         mesh,                    # the mesh 
-                                         False,                   # is it static?
-                                         False,                   # is it convex?
-                                         chrono.ChVectorD(0,0,0), # position on body
-                                         chrono.ChMatrix33D(1),   # orientation on body 
-                                         0.01) 
-body_1.SetCollide(True)
+#body_1.GetCollisionModel().ClearModel()
+#body_1.GetCollisionModel().AddTriangleMesh(material,                # contact material
+#                                         mesh,                    # the mesh 
+ # #                                        False,                   # is it convex?
+ #                                        chrono.ChVectorD(0,0,0), # position on body
+#                                         chrono.ChMatrix33D(1),   # orientation on body 
+#                                         0.01) 
+#body_1.SetCollide(True)
 
 
 # Visualization shape 

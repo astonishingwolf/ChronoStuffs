@@ -65,7 +65,7 @@ mysystem.Add(ground)
 # Create the rigid body with contact mesh
 body = chrono.ChBody()
 mysystem.Add(body)
-body.SetMass(1)
+body.SetMass(10)
 body.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
 body.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
 
