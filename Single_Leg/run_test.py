@@ -28,7 +28,7 @@ import pychrono.vehicle as veh
 # ---------------------------------------------------------------------
 #
 # Parse command-line parameters
-
+chrono.SetChronoDataPath(r"C:\Users\dasgu\Documents\ChronoStuffs\Single_Leg\leg_shapes")
 m_filename = "leg.py"
 m_timestep = 0.01
 m_length = 1.0
@@ -101,7 +101,7 @@ for my_item in exported_items:
 	print (my_item.GetName())
 
 for my_item in exported_items:
-    if((j>1) and (j<=3)):
+    if(j==1):
         mysystem.Add(my_item)
         #it.append(my_item)
         #my_item.SetMass(10)
@@ -134,7 +134,74 @@ for my_item in exported_items:
         my_item.SetCollide(True)
         
         j = j+1
-       
+    
+    if(j==2):
+        mysystem.Add(my_item)
+        #it.append(my_item)
+        #my_item.SetMass(10)
+        # Load mesh
+        my_item.SetMass(10)
+        #my_item.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
+        #tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
+        #my_item.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
+        mesh = chrono.ChTriangleMeshConnected()
+        mesh.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_2_1.obj'))
+
+        # Set visualization assets
+        vis_shape = chrono.ChTriangleMeshShape()
+        vis_shape.SetMesh(mesh)
+        my_item.AddAsset(vis_shape)
+        my_item.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
+
+        # Set collision shape
+        material = chrono.ChMaterialSurfaceSMC()
+
+        my_item.GetCollisionModel().ClearModel()
+        my_item.GetCollisionModel().AddTriangleMesh(material,                # contact material
+                                                    mesh,                    # the mesh 
+                                                    False,                   # is it static?
+                                                    False,                   # is it convex?
+                                                    chrono.ChVectorD(0,0,0), # position on body
+                                                    chrono.ChMatrix33D(1),   # orientation on body 
+                                                    0.01)                    # "thickness" for increased robustness
+        my_item.GetCollisionModel().BuildModel()
+        my_item.SetCollide(True)
+        
+        j = j+1
+        
+    if(j==3):
+        mysystem.Add(my_item)
+        #it.append(my_item)
+        #my_item.SetMass(10)
+        # Load mesh
+        my_item.SetMass(10)
+        #my_item.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
+        #tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
+        #my_item.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
+        mesh = chrono.ChTriangleMeshConnected()
+        mesh.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_2_1.obj'))
+
+        # Set visualization assets
+        vis_shape = chrono.ChTriangleMeshShape()
+        vis_shape.SetMesh(mesh)
+        my_item.AddAsset(vis_shape)
+        my_item.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
+
+        # Set collision shape
+        material = chrono.ChMaterialSurfaceSMC()
+
+        my_item.GetCollisionModel().ClearModel()
+        my_item.GetCollisionModel().AddTriangleMesh(material,                # contact material
+                                                    mesh,                    # the mesh 
+                                                    False,                   # is it static?
+                                                    False,                   # is it convex?
+                                                    chrono.ChVectorD(0,0,0), # position on body
+                                                    chrono.ChMatrix33D(1),   # orientation on body 
+                                                    0.01)                    # "thickness" for increased robustness
+        my_item.GetCollisionModel().BuildModel()
+        my_item.SetCollide(True)
+        
+        j = j+1
     elif(j>3):
         mysystem.Add(my_item)
         #it.append(my_item)
