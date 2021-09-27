@@ -67,6 +67,7 @@ body = chrono.ChBody()
 mysystem.Add(body)
 body.SetMass(10)
 body.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
+tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
 body.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
 
 # Load mesh
