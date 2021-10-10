@@ -77,6 +77,8 @@ mysystem.Add(mrod)
 #mrod.SetMass(50)
 #mrod.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
 mrod.SetPos(chrono.ChVectorD(0, 0.3, 0))
+mrod.SetRot(chrono.Q_ROTATE_Y_TO_Z)
+
 #it.append(my_item)
 #my_item.SetMass(10)
 # Load mesh
@@ -104,9 +106,46 @@ mrod.GetCollisionModel().AddTriangleMesh(material,                # contact mate
                                          chrono.ChMatrix33D(1),   # orientation on body 
                                          0.01)                    # "thickness" for increased robustness
 mrod.GetCollisionModel().BuildModel()
+mrod.SetBodyFixed(True)
 mrod.SetCollide(True)
 #mysystem.Add(mrod)
+# Create a stylized rod
+mrod1 = chrono.ChBody()
+mysystem.Add(mrod1)
+#mrod.SetMass(50)
+#mrod.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
+mrod1.SetPos(chrono.ChVectorD(0.33,0, 0.16))
+#mrod1.SetRot(chrono.ChQuaternionD(0.5,0.5,-0.5,0.5))
 
+#it.append(my_item)
+#my_item.SetMass(10)
+# Load mesh
+mrod1.SetMass(6)
+#my_item.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
+#tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
+#my_item.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
+mesh1 = chrono.ChTriangleMeshConnected()
+mesh1.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_2_1.obj'))
+mesh1.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
+# Set visualization assets
+vis_shape1 = chrono.ChTriangleMeshShape()
+vis_shape1.SetMesh(mesh)
+mrod1.AddAsset(vis_shape)
+mrod1.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
+# Set collision shape
+material = chrono.ChMaterialSurfaceSMC()
+
+mrod1.GetCollisionModel().ClearModel()
+mrod1.GetCollisionModel().AddTriangleMesh(material,                # contact material
+                                         mesh,                    # the mesh 
+                                         False,                   # is it static?
+                                         False,                   # is it convex?
+                                         chrono.ChVectorD(0,0,0), # position on body
+                                         chrono.ChMatrix33D(1),   # orientation on body 
+                                         0.01)                    # "thickness" for increased robustness
+mrod1.GetCollisionModel().BuildModel()
+mrod1.SetBodyFixed(True)
+mrod1.SetCollide(True)
 
 terrain = veh.SCMDeformableTerrain(mysystem)
 terrain.SetPlane(chrono.ChCoordsysD(chrono.ChVectorD(0,-0.15,0), chrono.Q_from_AngX(-math.pi/2)))
