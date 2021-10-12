@@ -92,136 +92,18 @@ mysystem = chrono.ChSystemNSC()
 j=0
 it = []
 it1 = []
-for my_item in exported_items:
-    it.append(my_item)
+for my_item1 in exported_items:
+    it.append(my_item1)
     
 
 #printing Component names
 
 # Print exported items
+#for my_item in exported_items:
+	#print (my_item.GetName())
 for my_item in exported_items:
-	print (my_item.GetName())
+	mysystem.Add(my_item)
 
-for my_item in exported_items:
-    if(j==1):
-        
-        #it.append(my_item)
-        #my_item.SetMass(10)
-        # Load mesh
-        my_item.SetMass(10)
-        #my_item.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
-        #tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
-        #my_item.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
-        mesh = chrono.ChTriangleMeshConnected()
-        mesh.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_1_1.obj'))
-        mesh.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
-        # Set visualization assets
-        vis_shape = chrono.ChTriangleMeshShape()
-        vis_shape.SetMesh(mesh)
-        my_item.AddAsset(vis_shape)
-        my_item.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
-
-        # Set collision shape
-        material = chrono.ChMaterialSurfaceSMC()
-
-        my_item.GetCollisionModel().ClearModel()
-        my_item.GetCollisionModel().AddTriangleMesh(material,                # contact material
-                                                    mesh,                    # the mesh 
-                                                    False,                   # is it static?
-                                                    False,                 # is it convex?
-                                                    chrono.ChVectorD(0,0,0), # position on body
-                                                    chrono.ChMatrix33D(1),   # orientation on body 
-                                                    0.01)                    # "thickness" for increased robustness
-        my_item.GetCollisionModel().BuildModel()
-        my_item.SetCollide(True)
-        it1.append(my_item)
-        mysystem.Add(my_item)
-        #it.append(my_item)
-        j = j+1
-    
-    if(j==2):
-        
-        #it.append(my_item)
-        #my_item.SetMass(10)
-        # Load mesh
-        my_item.SetMass(10)
-        #my_item.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
-        #tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
-        #my_item.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
-        mesh = chrono.ChTriangleMeshConnected()
-        mesh.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_2_1.obj'))
-        mesh.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
-        # Set visualization assets
-        vis_shape = chrono.ChTriangleMeshShape()
-        vis_shape.SetMesh(mesh)
-        my_item.AddAsset(vis_shape)
-        my_item.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
-
-        # Set collision shape
-        material = chrono.ChMaterialSurfaceSMC()
-
-        my_item.GetCollisionModel().ClearModel()
-        my_item.GetCollisionModel().AddTriangleMesh(material,                # contact material
-                                                    mesh,                    # the mesh 
-                                                    False,                   # is it static?
-                                                    False,                  # is it convex?
-                                                    chrono.ChVectorD(0,0,0), # position on body
-                                                    chrono.ChMatrix33D(1),   # orientation on body 
-                                                    0.01)                    # "thickness" for increased robustness
-        my_item.GetCollisionModel().BuildModel()
-        my_item.SetCollide(True)
-        it1.append(my_item)
-        mysystem.Add(my_item)
-        #it.append(my_item)
-        j = j+1
-        
-    if(j==3):
-        
-        #it.append(my_item)
-        #my_item.SetMass(10)
-        # Load mesh
-        my_item.SetMass(10)
-        #my_item.SetInertiaXX(chrono.ChVectorD(20, 20, 20))
-        #tire_center = chrono.ChVectorD(0, 0.02 + tire_rad, -1.5)
-        #my_item.SetPos(tire_center + chrono.ChVectorD(0, 0.3, 0))
-        mesh = chrono.ChTriangleMeshConnected()
-        mesh.LoadWavefrontMesh(chrono.GetChronoDataFile('/body_2_1.obj'))
-        mesh.Transform(chrono.ChVectorD(0,0,0), chrono.ChMatrix33D(1))
-        # Set visualization assets
-        vis_shape = chrono.ChTriangleMeshShape()
-        vis_shape.SetMesh(mesh)
-        my_item.AddAsset(vis_shape)
-        my_item.AddAsset(chrono.ChColorAsset(0.3, 0.3, 0.3))
-
-        # Set collision shape
-        material = chrono.ChMaterialSurfaceSMC()
-
-        my_item.GetCollisionModel().ClearModel()
-        my_item.GetCollisionModel().AddTriangleMesh(material,                # contact material
-                                                    mesh,                    # the mesh 
-                                                    False,                   # is it static?
-                                                    False,                   # is it convex?
-                                                    chrono.ChVectorD(0,0,0), # position on body
-                                                    chrono.ChMatrix33D(1),   # orientation on body 
-                                                    0.01)                    # "thickness" for increased robustness
-        my_item.GetCollisionModel().BuildModel()
-        my_item.SetCollide(True)
-        it1.append(my_item)
-        mysystem.Add(my_item)
-        #it.append(my_item)
-        j = j+1
-    elif(j>3):
-        it1.append(my_item)
-        mysystem.Add(my_item)
-        #it.append(my_item)
-        #it.append(my_item)
-        j = j+1
-        #it.append(my_item)
-    else :
-        it1.append(my_item)
-        #it.append(my_item)
-        j= j+1
-    
 
 #printing Component names
 
@@ -244,7 +126,7 @@ my_motor.Initialize(it[1],   # the first connected body
 #my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
 my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI*0) # ang.speed: 180°/s
 my_motor.SetMotorFunction(my_angularspeed)
-mysystem.Add(my_motor)
+#mysystem.Add(my_motor)
 #Between Torso_backet-2 and torso
 my_motor1 = chrono.ChLinkMotorRotationSpeed()
 my_motor1.Initialize(it[2],   # the first connected body
@@ -252,8 +134,8 @@ my_motor1.Initialize(it[2],   # the first connected body
                     chrono.ChFrameD(chrono.ChVectorD(0.141018628033538,-0.090598704515718,0.0952556529655919))) # where to create the motor in abs.space
 my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
 my_motor1.SetMotorFunction(my_angularspeed)
-mysystem.Add(my_motor1)
-
+#mysystem.Add(my_motor1)
+#
 
 
 
