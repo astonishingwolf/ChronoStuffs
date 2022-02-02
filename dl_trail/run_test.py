@@ -28,8 +28,8 @@ import pychrono.vehicle as veh
 # ---------------------------------------------------------------------
 #
 # Parse command-line parameters
-chrono.SetChronoDataPath(r"C:\Users\dasgu\Documents\ChronoStuffs\leg_try2\leg3_shapes")
-m_filename = "leg3.py"
+chrono.SetChronoDataPath(r"C:\Users\dasgu\Documents\ChronoStuffs\dl_trail\dl_shapes")
+m_filename = "dl.py"
 m_timestep = 0.01
 m_length = 1.0
 m_visualization = "irrlicht"
@@ -120,13 +120,24 @@ for my_item in exported_items:
 #sc = chrono.ChVectorD(0.245,0.0,0.0)
 #Between Torso_backet-2 and torso
 my_motor = chrono.ChLinkMotorRotationSpeed()
-my_motor.Initialize(it[1],   # the first connected body
+my_motor.Initialize(it[3],   # the first connected body
                     it[2],   # the second connected body
-                    chrono.ChFrameD(chrono.ChVectorD(-0.315,0.03,0.08),chrono.Q_ROTATE_X_TO_Z)) # where to create the motor in abs.space
-#my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
-my_angularspeed = chrono.ChFunction_Sine() # ang.speed: 180°/s
+                    chrono.ChFrameD(chrono.ChVectorD(-0.17,-0.015,-0.02))) # where to create the motor in abs.space
+my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
+my_angularspeed = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
 my_motor.SetMotorFunction(my_angularspeed)
 #mysystem.Add(my_motor)
+
+my_motor1 = chrono.ChLinkMotorRotationSpeed()
+my_motor1.Initialize(it[2],   # the first connected body
+                    it[1],   # the second connected body
+                    chrono.ChFrameD(chrono.ChVectorD(-0.14,-0.175,-0.02),chrono.Q_ROTATE_X_TO_Z)) # where to create the motor in abs.space
+my_angularspeed1 = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
+my_angularspeed1 = chrono.ChFunction_Const(chrono.CH_C_PI) # ang.speed: 180°/s
+my_motor1.SetMotorFunction(my_angularspeed1)
+#mysystem.Add(my_motor1)
+
+
 #Between Torso_backet-2 and torso
 #my_motor1 = chrono.ChLinkMotorRotationSpeed()
 #my_motor1.Initialize(it[2],   # the first connected body
@@ -140,8 +151,8 @@ my_motor.SetMotorFunction(my_angularspeed)
 
 
 terrain = veh.SCMDeformableTerrain(mysystem)
-terrain.SetPlane(chrono.ChCoordsysD(chrono.ChVectorD(0,-0.15,0), chrono.Q_from_AngX(-math.pi/2)))
-terrain.Initialize(2.0, 6.0, 0.004)
+terrain.SetPlane(chrono.ChCoordsysD(chrono.ChVectorD(0,-0.55,0), chrono.Q_from_AngX(-math.pi/2)))
+terrain.Initialize(2.0, 6.0, 0.004)#gives us the dimension of the plane
 
 my_params = MySoilParams()
 if var_params:
@@ -156,7 +167,7 @@ else :
                                30,     # Mohr friction limit (degrees)
                                0.01,   # Janosi shear coefficient (m)
                                4e7,    # Elastic stiffness (Pa/m), before plastic yield, must be > Kphi
-                               3e1     # Damping (Pa s/m), proportional to negative vertical speed (optional)
+                               3e4     # Damping (Pa s/m), proportional to negative vertical speed (optional)
     )
 
 # Set terrain visualization mode
@@ -166,9 +177,9 @@ terrain.SetPlotType(veh.SCMDeformableTerrain.PLOT_PRESSURE, 0, 30000.2)
 #my_system.SetMaxPenetrationRecoverySpeed(1.00)
 my_solver = chrono.ChSolverBB()
 mysystem.SetSolver(my_solver)
-my_solver.SetMaxIterations(600000)
+my_solver.SetMaxIterations(6000)
 my_solver.EnableWarmStart(True);
-mysystem.Set_G_acc(chrono.ChVectorD(0,-9.80,0))
+mysystem.Set_G_acc(chrono.ChVectorD(0,9.8,0))
     
 if m_visualization == "irrlicht":
 
@@ -192,6 +203,8 @@ if m_visualization == "irrlicht":
     myapplication.AssetBindAll()
     myapplication.AssetUpdateAll()
     myapplication.AddShadowAll()
+    myapplication.SetTimestep(0.000001)
+
 
     
     while(myapplication.GetDevice().run()):
